@@ -11,13 +11,13 @@ async function signup(parent, args, context, info) {
 
   return {
     token,
-    user
+    user,
   };
 }
 
 async function login(parent, args, context, info) {
   const user = await context.prisma.user({
-    email: args.email
+    email: args.email,
   });
   if (!user) {
     throw new Error('No such user found');
@@ -32,7 +32,7 @@ async function login(parent, args, context, info) {
 
   return {
     token,
-    user
+    user,
   };
 }
 
@@ -41,7 +41,13 @@ function post(parent, args, context, info) {
   return context.prisma.createLink({
     url: args.url,
     description: args.description,
-    postedBy: { connect: { id: userId } }
+    postedBy: { connect: { id: userId } },
+  });
+}
+
+function deleteLink(parent, args, context, info) {
+  return context.prisma.deleteLink({
+    id: args.id,
   });
 }
 
@@ -50,7 +56,7 @@ async function vote(parent, args, context, info) {
 
   const linkExists = await context.prisma.$exists.vote({
     user: { id: userId },
-    link: { id: args.linkId }
+    link: { id: args.linkId },
   });
 
   if (linkExists) {
@@ -59,7 +65,7 @@ async function vote(parent, args, context, info) {
 
   return context.prisma.createVote({
     user: { connect: { id: userId } },
-    link: { connect: { id: args.linkId } }
+    link: { connect: { id: args.linkId } },
   });
 }
 
@@ -67,5 +73,6 @@ module.exports = {
   signup,
   login,
   post,
-  vote
+  deleteLink,
+  vote,
 };

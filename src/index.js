@@ -13,7 +13,7 @@ const resolvers = {
   Subscription,
   User,
   Link,
-  Vote
+  Vote,
 };
 
 const server = new GraphQLServer({
@@ -22,8 +22,8 @@ const server = new GraphQLServer({
   context: request => {
     return {
       ...request,
-      prisma
+      prisma,
     };
-  }
+  },
 });
-server.start(() => console.log('Server is running on 4000'));
+server.start({ debug: true }, () => console.log('Server is running on 4000'));

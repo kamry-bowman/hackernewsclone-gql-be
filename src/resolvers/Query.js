@@ -15,17 +15,15 @@ const feed = async (root, args, context, info) => {
     orderBy: args.orderBy,
   });
 
-  const countPromise = context.prisma
-    .linksConnection({
-      where,
+  const countPromise = context.prisma .linksConnection({
+         where,
     })
     .aggregate()
     .count();
 
   const [links, count] = await Promise.all([linksPromise, countPromise]);
 
-  return { links, count };
-};
+  return { links, count }; };
 
 module.exports = {
   feed,
